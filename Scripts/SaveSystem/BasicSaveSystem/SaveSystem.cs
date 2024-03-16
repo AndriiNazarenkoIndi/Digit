@@ -2,7 +2,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class SaveSystem
+public class SaveSystem : ISaveSystem
 {
     private string _pathToFile;
 
