@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private bool _isMainMenu = false;
+
+    [Header("Name scenes")]
     [SerializeField] private string _nameMainMenuScene;
     [SerializeField] private string _nameBaseScene;
 
@@ -11,6 +14,7 @@ public class GameManager : MonoBehaviour
     public event GameOverEvent GameOverStatusEvent;
 
     public UnityEvent GameOverUnityEvent;
+    public bool IsMainMenu => _isMainMenu;
 
     public void GameStop()
     {

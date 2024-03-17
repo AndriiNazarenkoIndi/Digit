@@ -3,6 +3,9 @@ using UnityEngine.Events;
 
 public class RedBorder : MonoBehaviour
 {
+    public delegate void CubeCollisionRedBorder();
+    public CubeCollisionRedBorder CubeCollisionRedBorderEvent;
+
     public UnityEvent CollisionRedBorderEvent;
     private bool _borderTrigger = false;
 
@@ -12,6 +15,7 @@ public class RedBorder : MonoBehaviour
         {
             _borderTrigger = true;
             CollisionRedBorderEvent?.Invoke();
+            CubeCollisionRedBorderEvent?.Invoke();
         }
     }
 }
