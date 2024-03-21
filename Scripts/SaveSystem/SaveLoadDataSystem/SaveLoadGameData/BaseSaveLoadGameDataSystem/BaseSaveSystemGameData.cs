@@ -1,13 +1,11 @@
 public abstract class BaseSaveSystemGameData
 {
-    protected ScoreCounter _scoreCounter;
     protected GameDataToSave _gameData;
     protected ISaveSystem _saveSystem;
     private string _fileName;
 
-    protected BaseSaveSystemGameData(ScoreCounter scoreCounter)
+    protected BaseSaveSystemGameData()
     {
-        _scoreCounter = scoreCounter;
         InitSaveSystem();
         InitGameData();
     }

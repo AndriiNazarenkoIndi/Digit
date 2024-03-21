@@ -1,15 +1,11 @@
-using UnityEngine;
-
 public abstract class BaseSaveSystemSoundData
 {
-    protected SoundManager _soundManager;
     protected SoundDataToSave _soundSetting;
     protected ISaveSystem _saveSystem;
     private string _fileName;
 
-    public BaseSaveSystemSoundData(SoundManager soundManager)
+    public BaseSaveSystemSoundData()
     {
-        _soundManager = soundManager;
         InitSaveSystem();
         InitSoundSetting();
     }
