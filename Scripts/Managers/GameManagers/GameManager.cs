@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -13,12 +12,10 @@ public class GameManager : MonoBehaviour
     public delegate void GameOverEvent();
     public event GameOverEvent GameOverStatusEvent;
 
-    public UnityEvent GameOverUnityEvent;
     public bool IsMainMenu => _isMainMenu;
 
     public void GameStop()
     {
-        GameOverUnityEvent?.Invoke();
         GameOverStatusEvent?.Invoke();
     }
 

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class SoundSettingLoadSystem : BaseSaveSystemSoundData, ILoad
 {
-    private SoundManager _soundManager;
+    private AudioManager _audioManager;
 
-    public SoundSettingLoadSystem(SoundManager soundManager) : base() 
+    public SoundSettingLoadSystem(AudioManager audioManager) : base() 
     {
-        _soundManager = soundManager;
+        _audioManager = audioManager;
     }
 
     public void Load()
@@ -25,7 +25,7 @@ public class SoundSettingLoadSystem : BaseSaveSystemSoundData, ILoad
 
     private void AssigningValues()
     {
-        _soundManager._musicStatus = _soundSetting.musicStatus;
-        _soundManager._soundStatus = _soundSetting.soundStatus;
+        _audioManager.MusicStatus = _soundSetting.musicStatus;
+        _audioManager.SoundStatus = _soundSetting.soundStatus;
     }
 }

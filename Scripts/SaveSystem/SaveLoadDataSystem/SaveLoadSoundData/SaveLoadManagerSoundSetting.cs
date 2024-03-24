@@ -2,23 +2,23 @@ using UnityEngine;
 
 public class SaveLoadManagerSoundSetting : MonoBehaviour
 {
-    [SerializeField] private SoundManager _soundManager;
+    [SerializeField] private AudioManager audioManager;
 
     private ISave _soundSettingSaveSystem;
     private ILoad _soundSettingLoadSystem;
 
     private void Awake()
     {
-        AwakeInitSaveLoadSystem(_soundManager);
+        AwakeInitSaveLoadSystem(audioManager);
         LoadSoundSetting();
     }
 
-    private void AwakeInitSaveLoadSystem(SoundManager soundManager)
+    private void AwakeInitSaveLoadSystem(AudioManager audioManager)
     {
-        if (soundManager != null)
+        if (audioManager != null)
         {
-            _soundSettingSaveSystem = new SoundSettingSaveSystem(soundManager);
-            _soundSettingLoadSystem = new SoundSettingLoadSystem(soundManager);
+            _soundSettingSaveSystem = new SoundSettingSaveSystem(audioManager);
+            _soundSettingLoadSystem = new SoundSettingLoadSystem(audioManager);
         }
     }
 

@@ -20,7 +20,7 @@ public class UISetActiveManager : MonoBehaviour
     public void SetActiveGameOverPanel()
     {
         _setActiveGameOverPanel = true;
-        _setActiveSlider = !_setActiveGameOverPanel;
+        _setActiveSlider = !_setActiveSlider;
         _uiObjectSetActive.UIGameObjectSetActive(_gameOverPanel, _setActiveGameOverPanel);
         SetActiveSlider(_setActiveSlider);
     }
@@ -28,7 +28,7 @@ public class UISetActiveManager : MonoBehaviour
     public void SetActiveSettingPanel()
     {
         _setActiveSettintgPanel = !_setActiveSettintgPanel;
-        _setActiveSlider = !_setActiveSettintgPanel;
+        _setActiveSlider = !_setActiveSlider;
         _uiObjectSetActive.UIGameObjectSetActive(_gameSettingPanel, _setActiveSettintgPanel);
         SetActiveSlider(_setActiveSlider);
     }

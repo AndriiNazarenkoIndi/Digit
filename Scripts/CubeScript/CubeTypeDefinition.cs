@@ -15,7 +15,7 @@ public class CubeTypeDefinition : MonoBehaviour
     public int MaxValue => _maxValue;
     public int CubeValueOut => _cubeValueOut;
 
-    private void Start()
+    private void Awake()
     {
         _baseMaterial = GetComponent<Renderer>();
         SetCubeValue();
@@ -25,7 +25,6 @@ public class CubeTypeDefinition : MonoBehaviour
 
     private void SetCubeValue()
     {
-        //_cubeValues.Length - 1, щоб не спавнити максимальне значення
         _randomDigitForSetCubeValue = UnityEngine.Random.Range(0, (_cubeValues.Length - 1));
         _cubeValueOut = _randomDigitForSetCubeValue;
         _maxValue = _cubeValues.Length;

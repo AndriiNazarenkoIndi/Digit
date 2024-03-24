@@ -7,7 +7,7 @@ public class Cube : MonoBehaviour
     [SerializeField] [Range(1.0f, 10.0f)] private float _pushForce = 1.0f;
     [SerializeField] private ParticleSystem _explosionParticle;
 
-    Rigidbody _cubeRigidbody;
+    private Rigidbody _cubeRigidbody;
     private CubeTypeDefinition _cubeTypeDefinition;
 
     private bool _isMainCube;
@@ -17,13 +17,20 @@ public class Cube : MonoBehaviour
     private int _thisCubeValue;
     private int _maxTypeValue;
 
-    private static int _cubeID;
+    private static int _cubeID = 0;
     public static int pointCount;
 
     public delegate void CollisionEventHandler();
     public static event CollisionEventHandler CollisionWithMatchingCube;
 
-    public bool EntryUntoGame => _entryIntoGame;
+    //public delegate void CollisionEventHandlerReturn(Cube returendInPoolCube);
+    //public static event CollisionEventHandlerReturn CollisionWithMatchingCubeReturn;
+
+    public bool EntryUntoGame
+    {
+        get { return _entryIntoGame; }
+        set { _entryIntoGame = value; }
+    }
     public Rigidbody CubeRigidBody => _cubeRigidbody;
     public bool IsMainCube
     {
@@ -64,16 +71,21 @@ public class Cube : MonoBehaviour
         if (collision.gameObject != null && collision.gameObject.TryGetComponent(out Cube cube))
         {
             _entryIntoGame = true;
-            if (cube._thisCubeValue == _thisCubeValue)
+            CompareCubeValue(cube);
+        }
+    }
+
+    private void CompareCubeValue(Cube cube)
+    {
+        if (cube._thisCubeValue == _thisCubeValue)
+        {
+            if (_personalCubeNumber > cube._personalCubeNumber)
             {
-                if (_personalCubeNumber > cube._personalCubeNumber)
-                {
-                    HandleCollision(cube, this);
-                }
-                else
-                {
-                    HandleCollision(this, cube);
-                }
+                HandleCollision(cube, this);
+            }
+            else
+            {
+                HandleCollision(this, cube);
             }
         }
     }
@@ -81,11 +93,11 @@ public class Cube : MonoBehaviour
     private void HandleCollision(Cube deleteCube, Cube upgradeCube)
     {
         SetCubePoint(_thisCubeValue + _standartPoint);
+        DestroyEvent();
         Destroy(deleteCube.gameObject);
         SetNewValueAndColor(ref upgradeCube._thisCubeValue, upgradeCube._cubeTypeDefinition);
-        CubeExposionEffect(upgradeCube);
-        DestroyLastCube(upgradeCube._thisCubeValue, upgradeCube.gameObject);
-        CollisionWithMatchingCube?.Invoke();
+        CubeExplosionEffect(upgradeCube);
+        DestroyLastCube(upgradeCube._thisCubeValue, upgradeCube);
     }
 
     private void SetCubePoint(int point)
@@ -103,18 +115,25 @@ public class Cube : MonoBehaviour
         }
     }
 
-    private void DestroyLastCube(int cubeValue, GameObject cube)
+    private void DestroyLastCube(int cubeValue, Cube cube)
     {
         if (cubeValue >= _maxTypeValue)
         {
             SetCubePoint(_maxPoint);
-            Destroy(cube);
+            DestroyEvent();
+            Destroy(cube.gameObject);
         }
     }
 
-    private void CubeExposionEffect(Cube cube)
+    private void CubeExplosionEffect(Cube cube)
     {
         cube._cubeRigidbody.AddForce(Vector3.up * _pushForce, ForceMode.Impulse);
         cube._explosionParticle.Play();
+    }
+
+    private void DestroyEvent()
+    {
+        CollisionWithMatchingCube?.Invoke();
+        //CollisionWithMatchingCubeReturn?.Invoke(returendInPoolCube);
     }
 }

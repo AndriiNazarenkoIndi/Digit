@@ -9,4 +9,9 @@ public class EventAttacherDetacher
             Event();
         }
     }
+
+    public void AttachDetach(EventAttachDetach Event)
+    {
+        Event();
+    }
 }
