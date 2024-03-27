@@ -3,7 +3,11 @@ using TMPro;
 
 public class CubeTypeDefinition : MonoBehaviour
 {
+    [Header("If setting TMP_Text")]
+    [SerializeField] private bool _setText = true;
     [SerializeField] private TMP_Text[] _text;
+
+    [Header("Type materials")]
     [SerializeField] private Material[] _typeMaterials;
 
     private Renderer _baseMaterial;
@@ -17,10 +21,19 @@ public class CubeTypeDefinition : MonoBehaviour
 
     private void Awake()
     {
-        _baseMaterial = GetComponent<Renderer>();
+        GetBaseMaterial();
         SetCubeValue();
-        SetCubeValueText(_randomDigitForSetCubeValue);
         SetCubeMaterial(_randomDigitForSetCubeValue);
+
+        if (_setText)
+        {
+            SetCubeValueText(_randomDigitForSetCubeValue);
+        }
+    }
+    
+    private void GetBaseMaterial()
+    {
+        _baseMaterial = GetComponent<Renderer>();
     }
 
     private void SetCubeValue()
@@ -28,6 +41,7 @@ public class CubeTypeDefinition : MonoBehaviour
         _randomDigitForSetCubeValue = UnityEngine.Random.Range(0, (_cubeValues.Length - 1));
         _cubeValueOut = _randomDigitForSetCubeValue;
         _maxValue = _cubeValues.Length;
+
     }
 
     public void SetCubeValueText(int value)
@@ -40,6 +54,6 @@ public class CubeTypeDefinition : MonoBehaviour
 
     public void SetCubeMaterial(int value)
     {
-        _baseMaterial.material.color = _typeMaterials[value].color;
+        _baseMaterial.material = _typeMaterials[value];
     }
 }

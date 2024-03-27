@@ -5,7 +5,6 @@ public class Cube : MonoBehaviour
     [SerializeField] [Range(1, 50)] private int _standartPoint = 5;
     [SerializeField] [Range(1, 500)] private int _maxPoint = 200;
     [SerializeField] [Range(1.0f, 10.0f)] private float _pushForce = 1.0f;
-    [SerializeField] private ParticleSystem _explosionParticle;
 
     private Rigidbody _cubeRigidbody;
     private CubeTypeDefinition _cubeTypeDefinition;
@@ -23,8 +22,8 @@ public class Cube : MonoBehaviour
     public delegate void CollisionEventHandler();
     public static event CollisionEventHandler CollisionWithMatchingCube;
 
-    //public delegate void CollisionEventHandlerReturn(Cube returendInPoolCube);
-    //public static event CollisionEventHandlerReturn CollisionWithMatchingCubeReturn;
+    public delegate void CollisionEventHandlerCubeReturn(GameObject returendCube);
+    public static event CollisionEventHandlerCubeReturn CollisionWithMatchingCubeReturn;
 
     public bool EntryUntoGame
     {
@@ -93,7 +92,7 @@ public class Cube : MonoBehaviour
     private void HandleCollision(Cube deleteCube, Cube upgradeCube)
     {
         SetCubePoint(_thisCubeValue + _standartPoint);
-        DestroyEvent();
+        EventInvoke(deleteCube);
         Destroy(deleteCube.gameObject);
         SetNewValueAndColor(ref upgradeCube._thisCubeValue, upgradeCube._cubeTypeDefinition);
         CubeExplosionEffect(upgradeCube);
@@ -120,7 +119,7 @@ public class Cube : MonoBehaviour
         if (cubeValue >= _maxTypeValue)
         {
             SetCubePoint(_maxPoint);
-            DestroyEvent();
+            EventInvoke(cube);
             Destroy(cube.gameObject);
         }
     }
@@ -128,12 +127,11 @@ public class Cube : MonoBehaviour
     private void CubeExplosionEffect(Cube cube)
     {
         cube._cubeRigidbody.AddForce(Vector3.up * _pushForce, ForceMode.Impulse);
-        cube._explosionParticle.Play();
     }
 
-    private void DestroyEvent()
+    private void EventInvoke(Cube cube)
     {
         CollisionWithMatchingCube?.Invoke();
-        //CollisionWithMatchingCubeReturn?.Invoke(returendInPoolCube);
+        CollisionWithMatchingCubeReturn?.Invoke(cube.gameObject);
     }
 }

@@ -44,8 +44,7 @@ public class CubeController : MonoBehaviour
     {
         if (_baseCube != null && _isPointerDown)
         {
-            _cubePosition = _baseCube.transform.position;
-            _cubePosition.x = xMovement * _cubeMaxPositionX;
+            ClampMaxPositionSlideCube(_baseCube, xMovement);
         }
     }
 
@@ -58,8 +57,20 @@ public class CubeController : MonoBehaviour
                 _canMove = false;
                 _isPointerDown = false;
             }
-            _baseCube.CubeRigidBody.AddForce(-Vector3.forward * _pushForce, ForceMode.Impulse);
-            OnClickUpEvent?.Invoke();
+            PushCube(_baseCube);
         }
+    }
+
+    private void ClampMaxPositionSlideCube(Cube cube, float xMovement)
+    {
+        _cubePosition = cube.transform.position;
+        _cubePosition.x = xMovement * _cubeMaxPositionX;
+    }
+
+    private void PushCube(Cube cube)
+    {
+        cube.IsMainCube = false;
+        cube.CubeRigidBody.AddForce(-Vector3.forward * _pushForce, ForceMode.Impulse);
+        OnClickUpEvent?.Invoke();
     }
 }
