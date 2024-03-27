@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CubeSpawner : MonoBehaviour
 {
-    [SerializeField] [Range(0, 50)] private int _cubesQueueCapacity = 25;
+    [SerializeField] [Range(0, 100)] private int _cubesQueueCapacity = 60;
     [SerializeField] [Range(0, 30)] private int _increasingCapacityPool = 10;
     [SerializeField] private bool _autoQueueGrow = true;
     [SerializeField] private Cube _cubePrefab;
