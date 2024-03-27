@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    [SerializeField] [Range(1, 50)] private int _standartPoint = 5;
+    [SerializeField] private Rigidbody _cubeRigidbody;
+    [SerializeField] private CubeTypeDefinition _cubeTypeDefinition;
+    
+    [SerializeField] [Range(1, 50)] private int _standartPoint = 15;
     [SerializeField] [Range(1, 500)] private int _maxPoint = 200;
-    [SerializeField] [Range(1.0f, 10.0f)] private float _pushForce = 1.0f;
-
-    private Rigidbody _cubeRigidbody;
-    private CubeTypeDefinition _cubeTypeDefinition;
+    [SerializeField] [Range(1.0f, 10.0f)] private float _pushJumpForce = 1.0f;
 
     private bool _isMainCube;
     private bool _entryIntoGame = false;
@@ -41,7 +41,6 @@ public class Cube : MonoBehaviour
     {
         SetCubePoint(0);
         PersonalCubeNumberInit();
-        GetComponentInit();
         InitCubeTypeValue();
     }
 
@@ -52,16 +51,15 @@ public class Cube : MonoBehaviour
         _personalCubeNumber = _cubeID;
     }
 
-    private void GetComponentInit()
-    {
-        _cubeRigidbody = GetComponent<Rigidbody>();
-        _cubeTypeDefinition = GetComponent<CubeTypeDefinition>();
-    }
-
     private void InitCubeTypeValue()
     {
         _maxTypeValue = _cubeTypeDefinition.MaxValue;
         _thisCubeValue = _cubeTypeDefinition.CubeValueOut;
+    }
+
+    private void SetCubePoint(int point)
+    {
+        pointCount = point;
     }
     #endregion
 
@@ -91,42 +89,47 @@ public class Cube : MonoBehaviour
 
     private void HandleCollision(Cube deleteCube, Cube upgradeCube)
     {
-        SetCubePoint(_thisCubeValue + _standartPoint);
-        EventInvoke(deleteCube);
-        Destroy(deleteCube.gameObject);
-        SetNewValueAndColor(ref upgradeCube._thisCubeValue, upgradeCube._cubeTypeDefinition);
-        CubeExplosionEffect(upgradeCube);
+        CubeDestoy(deleteCube, (_thisCubeValue + _standartPoint));
+        UpdateCube(upgradeCube);
         DestroyLastCube(upgradeCube._thisCubeValue, upgradeCube);
-    }
-
-    private void SetCubePoint(int point)
-    {
-        pointCount = point;
-    }
-
-    private void SetNewValueAndColor(ref int value, CubeTypeDefinition cubeType)
-    {
-        value += 1;
-        if (value < _maxTypeValue)
-        {
-            cubeType.SetCubeMaterial(value);
-            cubeType.SetCubeValueText(value);
-        }
     }
 
     private void DestroyLastCube(int cubeValue, Cube cube)
     {
         if (cubeValue >= _maxTypeValue)
         {
-            SetCubePoint(_maxPoint);
-            EventInvoke(cube);
-            Destroy(cube.gameObject);
+            CubeDestoy(cube, _maxPoint);
         }
     }
 
-    private void CubeExplosionEffect(Cube cube)
+    private void CubeDestoy(Cube cube, int point)
     {
-        cube._cubeRigidbody.AddForce(Vector3.up * _pushForce, ForceMode.Impulse);
+        SetCubePoint(point);
+        EventInvoke(cube);
+        Destroy(cube.gameObject);
+    }
+
+    private void UpdateCube(Cube cube)
+    {
+        SetNewValueAndColor(ref cube._thisCubeValue, cube._cubeTypeDefinition);
+        JumpUpdateCube(cube);
+    }
+
+    private void SetNewValueAndColor(ref int value, CubeTypeDefinition cubeType)
+    {
+        value += 1;
+        if (cubeType != null && value < _maxTypeValue)
+        {
+            cubeType.SetCubeMaterial(value);
+        }
+    }
+
+    private void JumpUpdateCube(Cube cube)
+    {
+        if (_cubeRigidbody != null)
+        {
+            cube._cubeRigidbody.AddForce(Vector3.up * _pushJumpForce, ForceMode.Impulse);
+        }
     }
 
     private void EventInvoke(Cube cube)
